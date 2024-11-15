@@ -22,9 +22,9 @@ public class DogsRepository
     {
         var dog = new Dog
         {
-            Name = "Rex",
-            Breed = "German Shepherd",
-            Age = 5
+            Name = "Tracy",
+            Breed = "Labrador",
+            Age = 6
         };
 
         if
@@ -43,6 +43,38 @@ public class DogsRepository
         
     }
 
+    public void EF_Update()
+    {
+        // Hämta hunden med namnet "Rex"
+        var dogs = _context.Dogs.FirstOrDefault(c => c.Name == "Rex");
+    
+        // Kontrollera om hunden existerar
+        if (dogs == null)
+        {
+            Console.WriteLine("Dog with name 'Rex' not found.");
+            return; // Avbryt om hunden inte finns
+        }
+
+        // Uppdatera åldern på hunden
+        dogs.Age = 4;
+
+        // Spara ändringarna i databasen
+        _context.SaveChanges();
+        Console.WriteLine("Dog 'Rex' updated successfully.");
+    }
+
+    public void EF_Delete()
+    {
+        var dogs = _context.Dogs.FirstOrDefault(c => c.Id == 15);
+        if (dogs == null)
+        {
+            Console.WriteLine("Dog with id '14' not found.");
+            return;
+        }
+        _context.Dogs.Remove(dogs);
+        _context.SaveChanges();
+    }
+    
     public void Dapper_Create()
     {
         using (var connection = new SqliteConnection("Data Source=Dogs.db"))
@@ -70,6 +102,27 @@ public class DogsRepository
             string selectQuery = "SELECT * FROM Dogs WHERE Name = @Name";
             var dog = connection.QueryFirstOrDefault<Dog>(selectQuery, new { Name = "Elton" });
             Console.WriteLine($"Name: {dog?.Name}, Breed: {dog?.Breed}, Age: {dog?.Age}");
+           
+        }
+    }
+
+    public void Dapper_Update()
+    {
+        using (var connection = new SqliteConnection("Data Source=Dogs.db"))
+        {
+            connection.Open();
+            string updateQuery = "UPDATE Dogs SET Age = @Age WHERE Name = @Name";
+            connection.Execute(updateQuery, new { Age = 12 , Name = "Elton" });
+        }
+    }
+
+    public void Dapper_Delete()
+    {
+        using (var connection = new SqliteConnection("Data Source=Dogs.db"))
+        {
+            connection.Open();
+            string deleteQuery = "DELETE FROM Dogs WHERE Name = @Name";
+            connection.Execute(deleteQuery, new { Name = "Tracy" });
         }
     }
 }
