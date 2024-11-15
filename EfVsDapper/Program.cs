@@ -1,9 +1,12 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿namespace EfVsDapper;
 
-using EfVsDapper;
-
-Console.WriteLine("Hello, World!");
-using (var context = new DogContext())
+public class Program
 {
-    context.Database.EnsureCreated();
+    public static void Main(string[] args)
+    {
+        var repository = new DogsRepository();
+        repository.EF_Create();
+
+        Console.WriteLine("A dog has been added to the database!");
+    }
 }

@@ -1,17 +1,16 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace EfVsDapper;
-
-public class DogContext: DbContext
+namespace EfVsDapper
 {
-    public DogContext(DbSet<Dog> dog)
+    public class DogContext : DbContext
     {
-        Dog = dog;
-    }
+        // Definiera DbSet för Dog-tabellen
+        public DbSet<Dog> Dogs { get; set; } 
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-   {
-       
-    optionsBuilder.UseSqlite("Data Source=Dogs.db");  
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            // Konfigurera SQLite-databasen
+            optionsBuilder.UseSqlite("Data Source=Dogs.db");
+        }
     }
 }
